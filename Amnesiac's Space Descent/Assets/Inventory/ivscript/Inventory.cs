@@ -6,17 +6,6 @@ public class Inventory : MonoBehaviour
 {
     public GameObject[] inventory = new GameObject[12];
     private void OnTriggerEnter(Collider col)
-        public class pickupItem : MonoBehaviour
-    { 
-    
-        void OnTriggerEnter(Collider other)
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Destroy(other.gameObject);
-            }
-        }
-    
     {
         //when a collision occurs find out what you collided with and 
         // add interactable objects to inventory if room is available in inventory array
