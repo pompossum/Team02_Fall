@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//Jeff Wakeman
+// 10/15/19 Created
+// Used in every scene which isn't a menu
+// Attached to every door in a scene that isn't a menu
+// Changes scenes dependant on what door you walk through
 public class ChangeScene : MonoBehaviour
 {
     //When the player enters the door's collider 
@@ -17,5 +22,4 @@ public class ChangeScene : MonoBehaviour
             SceneManager.LoadScene(levelname);
         }
     }
-
 }

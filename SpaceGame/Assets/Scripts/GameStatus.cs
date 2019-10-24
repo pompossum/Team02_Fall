@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+//Jeff Wakeman & Jaime 
+//10/17/19
+//All the scenes
+//Empty object called game status
+// Keeps info between scenes. Inventory/ Player data/ map data
+//There can only be one!
+
 public class GameStatus : MonoBehaviour
 {
     

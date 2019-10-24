@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Jeff Wakeman, Nikki Garcia
+// 10/15/19 Created
+//Script is used in all scenes where the Player Prefab is located
+//Attached to Player Prefab
+//Moves the Player along the X and Z axes and gives the Player Prefab a jump movement option
 public class Movement : MonoBehaviour
 {
     public float moveSpeed = 10f;
@@ -17,20 +22,22 @@ public class Movement : MonoBehaviour
         {
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
-
+        //moves backwards
         if (Input.GetKey(KeyCode.S))
         {
             transform.Translate(-Vector3.forward * moveSpeed * Time.deltaTime);
         }
-
+        //moves left
         if (Input.GetKey(KeyCode.A))
         {
             transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
         }
+        //moves right
         if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
         }
+        //jumps
         if (Input.GetKey(KeyCode.Space))
         {
             if (player.transform.position.y == 1);

@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Jeff Wakeman, Nikki Garcia
+// 10/15/19 Created
+//Script is used in all scenes where the Player Prefab is located
+//Attached to Player Prefab
+//Allows for camera movement through mouse movement
+//Alternate camera control used for Phase II
 public class cameraController : MonoBehaviour
 {
 
