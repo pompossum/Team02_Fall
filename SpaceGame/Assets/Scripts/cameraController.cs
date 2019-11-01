@@ -25,8 +25,8 @@ public class cameraController : MonoBehaviour
     //the vertical angle at the which the player is looking
     public float rotationX = 0;
 
-    public float minimumVert = -45.0f;
-    public float maximumVert = 45.0f;
+    public float minimumVert = -90.0f;
+    public float maximumVert = 90.0f;
     void Update()
     {
         if (axes == RotationAxis.MouseX)
