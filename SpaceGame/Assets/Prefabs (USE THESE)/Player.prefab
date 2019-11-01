@@ -128,8 +128,8 @@ MonoBehaviour:
   sensHorizontal: 10
   sensVertical: 10
   rotationX: 0
-  minimumVert: -45
-  maximumVert: 45
+  minimumVert: -90
+  maximumVert: 90
 --- !u!114 &736802473513465561
 MonoBehaviour:
   m_ObjectHideFlags: 0
