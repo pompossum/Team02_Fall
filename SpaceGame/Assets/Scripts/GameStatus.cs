@@ -59,7 +59,7 @@ public class GameStatus : MonoBehaviour
         {
             if(prevLevel == "MessHall")
             {
-                Spawner.Spawn(0, 1, 12);//Place the player here
+                Spawner.Spawn(-36, 1, -10);//Place the player here
             }
         }
         //Room 2
