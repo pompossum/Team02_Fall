@@ -5,7 +5,7 @@ using UnityEngine;
 public class RotateCamera : MonoBehaviour
 {
     public GameObject target;//the target object
-    private float speedMod = 10.0f;//a speed modifier
+    private float speedMod = 0.5f;//a speed modifier
     private Vector3 point;//the coord to the point where the camera looks at
 
     void Start()
@@ -15,7 +15,7 @@ public class RotateCamera : MonoBehaviour
     }
 
     void Update()
-    {//makes the camera rotate around "point" coords, rotating around its Y axis, 20 degrees per second times the speed modifier
-        transform.RotateAround(point, new Vector3(0.0f, 1.0f, 0.0f), 20 * Time.deltaTime * speedMod);
+    {//makes the camera rotate around "point" coords, rotating around its Y axis, 15 degrees per second times the speed modifier
+        transform.RotateAround(point, new Vector3(0.0f, 1.0f, 0.0f), 15 * Time.deltaTime * speedMod);
     }
 }
