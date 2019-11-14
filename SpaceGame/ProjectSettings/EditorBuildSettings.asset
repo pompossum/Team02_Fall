@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ControlsMenu.unity
     guid: f3c45114122e8c048b11ef29efc9bcee
   - enabled: 1
+    path: Assets/Scenes/Cutscene.unity
+    guid: 6870a71226d24f148a6a528416f8ee0f
+  - enabled: 1
     path: Assets/Scenes/ExperimentalTesting.unity
     guid: ceed567177db27e4b85d0820929a1dd6
   - enabled: 1
