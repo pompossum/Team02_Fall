@@ -15,4 +15,10 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene(theScene);
     }
+
+    public void doExitGame()
+    {
+        Debug.Log("Game has been closed.");
+        Application.Quit();
+    }
 }
