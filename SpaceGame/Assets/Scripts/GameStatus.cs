@@ -16,8 +16,15 @@ public class GameStatus : MonoBehaviour
     public string level; //Holds the current scene's name
     public string prevLevel; //Holds the previous scene's name
 
-    private static List<GameObject> inventory = new List<GameObject>(); //List of inventory items
-    private static List<GameObject> isPickedUp = new List<GameObject>(); //Creates a list of all items picked up
+    //booleans to check if main objectives are comple
+    public bool power = false;
+    public bool oxy = false;
+    public bool food = false;
+    public bool sos = false;
+    public bool signal = false;
+
+    public static List<GameObject> inventory = new List<GameObject>(); //List of inventory items
+    public static List<GameObject> isPickedUp = new List<GameObject>(); //Creates a list of all items picked up
 
     private static GameStatus instance;
 
@@ -158,17 +165,13 @@ public class GameStatus : MonoBehaviour
                 Spawner.Spawn(0, 0, 0);//Place the player here
             }
         }
+        Puzzle.Check();
     }
     //add item to inventory list
     public static void AddInventory(GameObject item)
     {
         inventory.Add(item);
         isPickedUp.Add(item);
-        //foreach (GameObject i in inventory) //Displays inventory in debug log
-        //{
-        //    Debug.Log(i.name);
-        //}
-        //Debug.Log("------------------");
     }
     //is called when an item is picked up. 
     public static void IsItemPickedUp()//Checks if the item is in the item has been picked up and if it is present in the scene it deactivates it.
@@ -177,7 +180,7 @@ public class GameStatus : MonoBehaviour
         {
             if(GameObject.Find(item.name) != null)
             {
-                item.SetActive(false);
+                Destroy(item);
             }
         }
     }
@@ -185,4 +188,76 @@ public class GameStatus : MonoBehaviour
     {
         return inventory.Count;
     }
+
+
+
+    public bool Puzzles(string name, string item1, string item2, string item3)
+    {
+        foreach (GameObject i in inventory)
+        {
+            if (i.name == item1)
+            {
+                foreach (GameObject j in inventory)
+                {
+                    if (j.name == item2)
+                    {
+                        foreach (GameObject k in inventory)
+                        {
+                            if(k.name == item3)
+                            {
+                                inventory.Remove(i);
+                                inventory.Remove(j);
+                                inventory.Remove(k);
+                                return true;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public bool Puzzles(string name, string item1, string item2)
+    {
+        foreach(GameObject i in inventory)
+        {
+            if(i.name == item1)
+            {
+                foreach(GameObject j in inventory)
+                {
+                    if(j.name == item2)
+                    {
+                        inventory.Remove(i);
+                        inventory.Remove(j);
+                        return true;
+
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public bool Puzzles(string name, string item)
+    {
+        foreach (GameObject i in inventory)
+        {
+            if (i.name == item)
+            {
+                inventory.Remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
 }
