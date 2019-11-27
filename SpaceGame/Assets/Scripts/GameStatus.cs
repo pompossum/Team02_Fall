@@ -1,6 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+// Required For Raw Image
+using UnityEngine.UI;
+
+// Required For Scene Change
 using UnityEngine.SceneManagement;
 
 //Jeff Wakeman & Jaime 
@@ -54,6 +59,7 @@ public class GameStatus : MonoBehaviour
         IsItemPickedUp(); //Checks to see if items in room have been picked up
 
         //Depending on what room the game has loaded and the previous level loaded this will place the player in the appropriate area for the correct door
+        // All Levels named "Offices" have been renamed "EVA Suit Storage" to match the scene name correction. -- Justin 11/25/2019 23:20
         //Room 1
         if (level == "BioDome")
         {
@@ -73,7 +79,7 @@ public class GameStatus : MonoBehaviour
             {
                 Spawner.Spawn(-12, 1, 0);//Place the player here
             }
-            else if(prevLevel == "Offices")
+            else if(prevLevel == "EVA Suit Storage")
             {
                 Spawner.Spawn(0, 1, 12);//Place the player here
             }
@@ -93,13 +99,13 @@ public class GameStatus : MonoBehaviour
             {
                 Spawner.Spawn(0, 1, -12);//Place the player here
             }
-            else if(prevLevel == "Offices")
+            else if(prevLevel == "EVA Suit Storage")
             {
                 Spawner.Spawn(12, 1, 0);//Place the player here
             }
         }
         //Room 4
-        else if(level == "Offices")
+        else if(level == "EVA Suit Storage")
         {
             if(prevLevel == "MessHall")
             {
@@ -164,11 +170,67 @@ public class GameStatus : MonoBehaviour
     {
         inventory.Add(item);
         isPickedUp.Add(item);
+
+        // Justin Bittner 11/25/19 1506
+        // Add Sprite To Inventory
+
+        // Variable Declarations
+        string itemIconPath;
+
+        // Enter Name Of Inventory HUD panels here
+        string invHUDName = "";
+
+        // Declare Texture && GameObject
+        Texture newTexture;
+        GameObject inventoryHUDElement;
+
+        // Set Path
+        // Name Sprites same name as the item they represent
+        itemIconPath = "hudSprites/" + item.name;
+
+        // Find Texture
+        newTexture = Resources.Load<Texture2D>(itemIconPath);
+
+        // Sets Current Inventory Slot
+        inventoryHUDElement = GameObject.Find(invHUDName + GetSlot(item));
+
+        // Added "Using UnityEngine.UI;" At Top
+        // VVVVV Requires It VVVVV
+        inventoryHUDElement.GetComponent<RawImage>().texture = newTexture;
+
+        // Debug
         //foreach (GameObject i in inventory) //Displays inventory in debug log
         //{
         //    Debug.Log(i.name);
         //}
         //Debug.Log("------------------");
+    }
+
+    // Justin Bittner 11/25/19 2329
+    // Func Called To Figure Out
+    // Called After Pick Up To Establish Texture Ontop Of Inventory UI By Scanning Inventor For The Item And Checking The Slot
+    private static int GetSlot(GameObject obj)
+    {
+        // Sets Counter
+        int slot = 1;
+
+        // Scans Through List
+        foreach (GameObject item in inventory)
+        {
+            
+            // Checks For Slot
+            if (item == obj)
+            {
+                return slot;
+            }
+
+            // Counts
+            slot += 1;
+
+        }
+
+        // Error
+        return -1;
     }
     //is called when an item is picked up. 
     public static void IsItemPickedUp()//Checks if the item is in the item has been picked up and if it is present in the scene it deactivates it.

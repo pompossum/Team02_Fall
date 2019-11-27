@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MessHall.unity
     guid: 100b30ca4f0963c4cb2c8437370b8931
   - enabled: 1
-    path: Assets/Scenes/Offices.unity
+    path: Assets/Scenes/EVA Suit Storage.unity
     guid: fa9ac6e5f1dca2f4aa6e31673f3d4682
   - enabled: 1
     path: Assets/Scenes/WinScene.unity
