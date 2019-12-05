@@ -13,18 +13,18 @@ public class Puzzle : MonoBehaviour
 
     public static void Check()
     {
-        if( itemsRequired.Length == 3)
-        {
-            completed = GameStatus.GetCurrent().Puzzles(puzzleName, itemsRequired[0], itemsRequired[1], itemsRequired[2]);
-        }
-        else if(itemsRequired.Length == 2)
-        {
-            completed = GameStatus.GetCurrent().Puzzles(puzzleName, itemsRequired[0], itemsRequired[1]);
-        }
-        else
-        {
-            completed = GameStatus.GetCurrent().Puzzles(puzzleName, itemsRequired[0]);
-        }
+    //    if (itemsRequired.Length == 3)
+    //    {
+    //        completed = GameStatus.GetCurrent().Puzzles(puzzleName, itemsRequired[0], itemsRequired[1], itemsRequired[2]);
+    //    }
+    //    else if(itemsRequired.Length == 2)
+    //    {
+    //        completed = GameStatus.GetCurrent().Puzzles(puzzleName, itemsRequired[0], itemsRequired[1]);
+    //    }
+    //    else
+    //    {
+    //        completed = GameStatus.GetCurrent().Puzzles(puzzleName, itemsRequired[0]);
+    //    }
         
     }
 }

@@ -15,9 +15,7 @@ public class PickUpItem : MonoBehaviour
         {
             if (GameStatus.GetLength() < 12)//Checks if there is room in player inventory
             {
-                GameStatus.AddInventory(this.gameObject);//adds object to inventory
-                this.gameObject.SetActive(false);
-                Debug.Log(this.gameObject.name);
+                GameStatus.AddInventory(gameObject);//adds object to inventory
             }
             else
             {

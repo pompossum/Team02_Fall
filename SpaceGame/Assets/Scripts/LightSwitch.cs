@@ -11,15 +11,19 @@ public class LightSwitch : MonoBehaviour
     // Use this for initialization
     void OnTriggerStay(Collider plyr)
     {
-        if (plyr.tag == "Player" && Input.GetKeyDown(KeyCode.F) && !on)
+        if (GameStatus.GetCurrent().power)
         {
-            light.SetActive(true);
-            on = true;
-        }
-        else if (plyr.tag == "Player" && Input.GetKeyDown(KeyCode.F) && on)
-        {
-            light.SetActive(false);
-            on = false;
+            if (plyr.tag == "Player" && Input.GetKeyDown(KeyCode.F) && !on)
+            {
+                light.SetActive(true);
+                on = true;
+            }
+
+            else if (plyr.tag == "Player" && Input.GetKeyDown(KeyCode.F) && on)
+            {
+                light.SetActive(false);
+                on = false;
+            }
         }
     }
 }

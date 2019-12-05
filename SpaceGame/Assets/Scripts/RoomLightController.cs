@@ -12,7 +12,7 @@ public class RoomLightController : MonoBehaviour
     public ParticleSystem ps;
     void Start()
     {
-        if (GameStatus.GetCurrent().power == false)
+        if (!GameStatus.GetCurrent().power)
         {
             wl.enabled = false;
             StartCoroutine(Flashing());
@@ -22,7 +22,7 @@ public class RoomLightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameStatus.GetCurrent().power == true)
+        if(GameStatus.GetCurrent().power)
         {
             StopAllCoroutines();
             wl.enabled = true;
@@ -34,7 +34,7 @@ public class RoomLightController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
+            yield return new WaitForSeconds(3f);
             rl.enabled = !rl.enabled;
         }
     }

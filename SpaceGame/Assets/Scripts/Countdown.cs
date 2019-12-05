@@ -13,11 +13,19 @@ public class Countdown : MonoBehaviour
     private bool canCount = true;
     private bool doOnce = false;
     private static Countdown TimerInstance;
+    public string timeStampCreate;
+    public int timeStamp;
 
+    public static Countdown GetCurrent()
+    {
+        return TimerInstance; //Returns the current instance
+    }
     void Awake()
     {
+        timeStampCreate = System.DateTime.Now.Hour.ToString() + System.DateTime.Now.Minute.ToString();
+        timeStamp = System.Convert.ToInt32(timeStampCreate);
         //only one timer instance will exist at a time
-        if (TimerInstance != null)
+        if (TimerInstance != null && timeStamp > TimerInstance.timeStamp)
         {
             Destroy(this.gameObject);
             Debug.Log("New Timer Destroyed");
@@ -50,7 +58,8 @@ public class Countdown : MonoBehaviour
 
         else if (timer <= 0.0f)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
+			Debug.Log("Countdown Update()");
             SceneManager.LoadScene("GameOver");
         }
     }

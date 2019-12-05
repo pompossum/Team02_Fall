@@ -1,6 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+// Required For Raw Image
+using UnityEngine.UI;
+
+// Required For Scene Change
 using UnityEngine.SceneManagement;
 
 //Jeff Wakeman & Jaime 
@@ -12,9 +17,14 @@ using UnityEngine.SceneManagement;
 
 public class GameStatus : MonoBehaviour
 {
-    
     public string level; //Holds the current scene's name
     public string prevLevel; //Holds the previous scene's name
+
+    public float nextX;
+    public float nextY;
+    public float nextZ;
+
+    public bool setSpawn;
 
     //booleans to check if main objectives are comple
     public bool power = false;
@@ -23,10 +33,34 @@ public class GameStatus : MonoBehaviour
     public bool sos = false;
     public bool signal = false;
 
+    // SOS Reqs
+    public bool secOverwritten;
+    public bool sosPlacement;
+
+    // Signal Reqs
+    public bool table;
+    public bool signaled;
+
+    // Power Reqs
+    public bool cell1;
+    public bool cell2;
+    public bool cell3;
+    public bool leakFixed;
+
+    // Oxygen Reqs
+    public bool hullFix;
+    public bool lifeSupportFix;
+
+    // Public Declaration For List
+    public string[,] itemList;
+    public int objectsInList;
+
     public static List<GameObject> inventory = new List<GameObject>(); //List of inventory items
     public static List<GameObject> isPickedUp = new List<GameObject>(); //Creates a list of all items picked up
 
     private static GameStatus instance;
+    public string timeStampCreate;
+    public int timeStamp;
 
     public static GameStatus GetCurrent()
     {
@@ -34,8 +68,10 @@ public class GameStatus : MonoBehaviour
     }
     void Awake()
     {
+        timeStampCreate = System.DateTime.Now.Hour.ToString() + System.DateTime.Now.Minute.ToString() + System.DateTime.Now.Second.ToString() + System.DateTime.Now.Millisecond.ToString();
+        timeStamp = System.Convert.ToInt32(timeStampCreate);
         //Singleton. There can only be one! If one already exists then destroy this one.
-        if (instance != null)
+        if (instance != null && timeStamp > instance.timeStamp)
         {
             Destroy(this.gameObject);
             Debug.Log("New GameStatus Destroyed");
@@ -43,6 +79,109 @@ public class GameStatus : MonoBehaviour
         }
         instance = this;
         GameObject.DontDestroyOnLoad(this.gameObject); //Makes the object this script is attached to not unload on new scene. Carries this object to the next scene.
+    }
+
+    void Start()
+    {
+        // Declarations
+        int countItems = 0;
+        string readLine;
+        string path = Application.dataPath + "/Resources/itemReqList.ini";// Location Of Ini File
+        System.IO.StreamReader listCompiler;
+
+        // Checks Amount Of Lines(Items)
+        // Also has 1000 item limit in case of error unity won't freeze
+        listCompiler = new System.IO.StreamReader(path);
+        while ((readLine = listCompiler.ReadLine()) != null && countItems < 1000)
+        {
+            countItems++;
+        }
+        Debug.Log(countItems);
+
+        // Total Objects Count
+        objectsInList = countItems;
+
+        // Define Array Size
+        itemList = new string[countItems, 5];
+
+        // Reset Count Var And StreamReader
+        countItems = 0;
+        listCompiler.Close();
+        listCompiler = new System.IO.StreamReader(path);
+
+        // Populate Array
+        while ((readLine = listCompiler.ReadLine()) != null && countItems < 1000)
+        {
+            // Set Indexes
+            int first = readLine.IndexOf('!');
+            int second = readLine.IndexOf('@');
+            int third = readLine.IndexOf('#');
+            int last = readLine.IndexOf('$');
+
+            // Set [x, 0]
+            // Interactive Name
+            string intName = readLine.Substring(0, first);
+            itemList[countItems, 0] = intName;
+
+            // Set [x,1]
+            // Required Scene(Room) Name
+            string sceneName = readLine.Substring(first + 1, second - first - 1);
+            itemList[countItems, 1] = sceneName;
+
+            // Set [x,2]
+            // Item Required To Complete Puzzle
+            string reqItem = readLine.Substring(second + 1, third - second - 1);
+            itemList[countItems, 2] = reqItem;
+
+            // Set [x,3]
+            // Function Called To Complete Puzzle
+            string funcCall = readLine.Substring(third + 1, last - third - 1);
+            itemList[countItems, 3] = funcCall;
+
+            // Set [x,4]
+            // Remove Item After This Use
+            string itemRemove = readLine.Substring(last + 1);
+            itemList[countItems, 4] = itemRemove;
+
+            countItems++;
+        }
+        listCompiler.Close();
+    }
+
+    // Sets Main Conditions To True
+    // If Conditions Are Met
+    void Update()
+    {
+        // Oxygen
+        if (oxy == false && hullFix == true && lifeSupportFix == true)
+        {
+            GetComponent<Countdown>().enabled = false;
+            oxy = true;
+        }
+
+        // Signal
+        if (signal == false && table == true && signaled == true)
+        {
+            signal = true;
+        }
+
+        // Sos
+        if (sos == false && sosPlacement == true && secOverwritten == true)
+        {
+            sos = true;
+        }
+
+        // Power
+        if (power == false && cell1 == true && cell2 == true && cell3 == true && leakFixed == true)
+        {
+            power = true;
+        }
+
+        if (power == true && sos == true && signal == true && oxy == true && food == true)
+        {
+        Destroy(gameObject);
+        SceneManager.LoadScene("WinScene");
+        }
     }
     void OnEnable()
     {
@@ -58,129 +197,74 @@ public class GameStatus : MonoBehaviour
         Debug.Log(scene.name);//Displays name of the scene
         Debug.Log("PrevLevel string: " + prevLevel); //Displays what the previous scene was
         GameStatus.GetCurrent().level = scene.name;// sets current level in the instance to the active scene
-        IsItemPickedUp(); //Checks to see if items in room have been picked up
+        //IsItemPickedUp(); //Checks to see if items in room have been picked up
 
         //Depending on what room the game has loaded and the previous level loaded this will place the player in the appropriate area for the correct door
-        //Room 1
-        if (level == "BioDome")
+        //Puzzle.Check();
+        IsItemPickedUp(); //Checks to see if items in room have been picked up
+        if (setSpawn)
         {
-            if(prevLevel == "MessHall")
-            {
-                Spawner.Spawn(-36, 1, -10);//Place the player here
-            }
+            Spawner.Spawn(nextX, nextY, nextZ);
+            setSpawn = false;
         }
-        //Room 2
-        else if (level == "MessHall")
-        {
-            if(prevLevel == "BioDome")
-            {
-                Spawner.Spawn(0, 1, -12);//Place the player here
-            }
-            else if(prevLevel == "Barracks")
-            {
-                Spawner.Spawn(-12, 1, 0);//Place the player here
-            }
-            else if(prevLevel == "Offices")
-            {
-                Spawner.Spawn(0, 1, 12);//Place the player here
-            }
-            else if(prevLevel == "ExperimentalTesting")
-            {
-                Spawner.Spawn(12, 1, 0);//Place the player here
-            }
-            else if(prevLevel == "ControlRoom")
-            {
-                Spawner.Spawn(-8, 1, -12);//Place the player here
-            }
-        }
-        //Room 3
-        else if( level == "Barracks")
-        {
-            if(prevLevel == "MessHall")
-            {
-                Spawner.Spawn(0, 1, -12);//Place the player here
-            }
-            else if(prevLevel == "Offices")
-            {
-                Spawner.Spawn(12, 1, 0);//Place the player here
-            }
-        }
-        //Room 4
-        else if(level == "Offices")
-        {
-            if(prevLevel == "MessHall")
-            {
-                Spawner.Spawn(0, 1, -12);//Place the player here
-            }
-            else if(prevLevel == "Barracks")
-            {
-                Spawner.Spawn(-12, 1, 0);//Place the player here
-            }
-        }
-        //Room 5
-        else if(level == "ExperimentalTesting")
-        {
-            if(prevLevel == "MessHall")
-            {
-                Spawner.Spawn(0, 1, -12);//Place the player here
-            }
-            else if(prevLevel == "Cargo")
-            {
-                Spawner.Spawn(0, 1, 0);//Place the player here
-            }
-        }
-        //Room 6
-        else if(level == "ControlRoom")
-        {
-            if(prevLevel == "MessHall")
-            {
-                Spawner.Spawn(-10, 1, -10);//Place the player here
-            }
-            else if(prevLevel == "Power")
-            {
-                Spawner.Spawn(0, 1, 12);//Place the player here
-            }
-        }
-        //Room 7
-        else if(level == "Power")
-        {
-            if(prevLevel == "ControlRoom")
-            {
-                Spawner.Spawn(0, 1, -12);//Place the player here
-            }
-            else if(prevLevel == "Cargo")
-            {
-                Spawner.Spawn(-12, 1, 0);//Place the player here
-            }
-        }
-        //Room 8
-        else if(level == "Cargo")
-        {
-            if(prevLevel == "Power")
-            {
-                Spawner.Spawn(0, 0, 0);//Place the player here
-            }
-            else if(prevLevel == "ExperimentalTesting")
-            {
-                Spawner.Spawn(0, 0, 0);//Place the player here
-            }
-        }
-        Puzzle.Check();
     }
     //add item to inventory list
     public static void AddInventory(GameObject item)
     {
         inventory.Add(item);
         isPickedUp.Add(item);
+
+        // Debug
+        //foreach (GameObject i in inventory) //Displays inventory in debug log
+        //{
+        //    Debug.Log(i.name);
+        //}
+        //Debug.Log("------------------");
+        DontDestroyOnLoad(item.gameObject);
+        item.gameObject.SetActive(false);
+    }
+
+    // Justin Bittner 11/25/19 2329
+    // Func Called To Figure Out
+    // Called After Pick Up To Establish Texture Ontop Of Inventory UI By Scanning Inventor For The Item And Checking The Slot
+    private static int GetSlot(GameObject obj)
+    {
+        // Sets Counter
+        int slot = 1;
+
+        // Scans Through List
+        foreach (GameObject item in inventory)
+        {
+            
+            // Checks For Slot
+            if (item == obj)
+            {
+                return slot;
+            }
+
+            // Counts
+            slot += 1;
+
+        }
+
+        // Error
+        return -1;
     }
     //is called when an item is picked up. 
     public static void IsItemPickedUp()//Checks if the item is in the item has been picked up and if it is present in the scene it deactivates it.
     {
-        foreach (GameObject item in isPickedUp)
+        //foreach (GameObject item in isPickedUp)
+        //{
+        //    Destroy(item);
+        //    Debug.Log("Destroyed");
+        //}
+        for (int i = 0; i < isPickedUp.Count; i++)
         {
-            if(GameObject.Find(item.name) != null)
+            string searchFor = isPickedUp[i].gameObject.name;
+            GameObject destroy = GameObject.Find(searchFor);
+            if (destroy != null)
             {
-                Destroy(item);
+                Destroy(destroy);
             }
         }
     }
@@ -203,7 +287,7 @@ public class GameStatus : MonoBehaviour
                     {
                         foreach (GameObject k in inventory)
                         {
-                            if(k.name == item3)
+                            if (k.name == item3)
                             {
                                 inventory.Remove(i);
                                 inventory.Remove(j);
@@ -218,15 +302,16 @@ public class GameStatus : MonoBehaviour
         }
         return false;
     }
+
     public bool Puzzles(string name, string item1, string item2)
     {
-        foreach(GameObject i in inventory)
+        foreach (GameObject i in inventory)
         {
-            if(i.name == item1)
+            if (i.name == item1)
             {
-                foreach(GameObject j in inventory)
+                foreach (GameObject j in inventory)
                 {
-                    if(j.name == item2)
+                    if (j.name == item2)
                     {
                         inventory.Remove(i);
                         inventory.Remove(j);
@@ -250,8 +335,6 @@ public class GameStatus : MonoBehaviour
         }
         return false;
     }
-
-
 
 
 

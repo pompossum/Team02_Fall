@@ -6,11 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Barracks.unity
-    guid: 2d373b6c8062b4c4eb3a353e52e7e8a2
+    path: Assets/Scenes/MainMenu.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/BioDome.unity
     guid: fa34ead8a708b454c89c1d35020a63ea
+  - enabled: 1
+    path: Assets/Scenes/Barracks.unity
+    guid: 2d373b6c8062b4c4eb3a353e52e7e8a2
   - enabled: 1
     path: Assets/Scenes/Cargo.unity
     guid: afb6870c966933f47a107170ef342616
@@ -35,9 +38,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestScene.unity
     guid: c8851adeb4c248f4f9fe23903b458803
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/MessHall.unity
     guid: 100b30ca4f0963c4cb2c8437370b8931

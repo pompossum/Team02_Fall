@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6093569089768913400}
   - component: {fileID: 552884637923411201}
   - component: {fileID: 1465553420725001540}
+  - component: {fileID: 2378763378151416611}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Environmental
@@ -92,3 +93,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 2540817853737639666, guid: c9137708faba1a042a3a267d8735e642, type: 3}
+--- !u!114 &2378763378151416611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2274576930028138973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpinSpeed: 30
+  RotationRange: 15
+  Motion: 0

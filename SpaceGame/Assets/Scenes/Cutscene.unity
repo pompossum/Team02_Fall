@@ -2575,6 +2575,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e9c3f6a8cb3764b8fc30ff501438e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnGameStatus: {fileID: 2979666904662357254, guid: 8f5f816f0c6334c4fb265b26ff0d442e,
+    type: 3}
   LevelToLoad: BioDome
 --- !u!1001 &1468125474
 PrefabInstance:

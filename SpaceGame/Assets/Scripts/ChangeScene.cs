@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 public class ChangeScene : MonoBehaviour
 {
     //When the player enters the door's collider 
+    public float x;
+    public float y;
+    public float z;
     public void OnTriggerEnter(Collider other)
     {
         string levelname = this.name;
@@ -20,6 +23,11 @@ public class ChangeScene : MonoBehaviour
             //Debug.Log("pLevel: " + pLevel);
             GameStatus.GetCurrent().prevLevel = pLevel;
             SceneManager.LoadScene(levelname);
+            GameStatus.GetCurrent().nextX = x;
+            GameStatus.GetCurrent().nextY = y;
+            GameStatus.GetCurrent().nextZ = z;
+            GameStatus.GetCurrent().setSpawn = true;
+            //Spawner.Spawn(x, 1f, z);
         }
     }
 }

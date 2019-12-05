@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MoveText : MonoBehaviour
 {
+    public GameObject spawnGameStatus;
     public string LevelToLoad;
     //float currCountdownValue;
 
@@ -18,6 +19,10 @@ public class MoveText : MonoBehaviour
 
         if (Input.GetKeyDown("space"))
         {
+
+            GameObject spawnedGS = Instantiate(spawnGameStatus);
+            spawnedGS.name = "GameStatus";
+
             SceneManager.LoadScene(LevelToLoad);
         }
     }
